@@ -15,6 +15,10 @@ export {WIDTH};
 var HEIGHT = 4;
 export {HEIGHT};
 
+// @ Todo
+// Board needs different types of squares
+// Game block || empty block (for non square blocks)
+// Board needs to store edge pieces types - this simplifies movement checks
 var BOARD = [
   [
     { 
