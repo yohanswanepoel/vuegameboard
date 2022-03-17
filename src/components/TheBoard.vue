@@ -31,6 +31,8 @@
           "col" : col,
           "colour" : BOARD[row][col].colour,
           "original_color":  BOARD[row][col].colour,
+          "borders": BOARD[row][col].borders,
+          "game_block": BOARD[row][col].game_block
         };
         arr.push(obj);
       }
@@ -59,12 +61,14 @@
   }
 
   function clicked(index, key){
-    console.log(this.board[index]);
-    if (this.current_block != -1){
-      this.board[this.current_block].colour = this.board[this.current_block].original_color;
+    if(this.board[index].game_block){
+      console.log(this.board[index]);
+      if (this.current_block != -1){
+        this.board[this.current_block].colour = this.board[this.current_block].original_color;
+      }
+      this.current_block = index;
+      this.board[index].colour = "black";
     }
-    this.current_block = index;
-    this.board[index].colour = "black";
   }
 
   function move(direction){
@@ -141,39 +145,27 @@
     let canLeft = 0;
     // Left
     if(direction == LEFT){
-      if (col > 0) {
-        return true;
-      }
+      return this.board[this.current_block].borders.left;
     }
     // Right
     if(direction == RIGHT){
-      if (col < WIDTH - 1) {
-        return true;
-      }
+      return this.board[this.current_block].borders.right;
     }
     // Up Left
     if(direction == TOPLEFT){
-      if (row > 0 && col > 0 || (row > 0 && (row % 2 == 1))) {
-        return true;
-      } 
+      return this.board[this.current_block].borders.top_left;
     }
     // Up Right
     if(direction == TOPRIGHT){
-      if (row > 0 && col < WIDTH - 1 || (row > 0 && (row % 2 == 0))) {
-        return true;
-      } 
+      return this.board[this.current_block].borders.top_right;
     }
     // Down Left
     if(direction == BOTTOMLEFT){
-      if (row < HEIGHT - 1 && col > 0 || (row < HEIGHT - 1 && (row % 2 == 1))) {
-        return true;
-      } 
+      return this.board[this.current_block].borders.bottom_left;
     }
     // Down Right
     if(direction == BOTTOMRIGHT){
-      if (row < HEIGHT - 1 && col < WIDTH - 1 || (row < HEIGHT - 1 && (row % 2 == 0))) {
-        return true;
-      } 
+      return this.board[this.current_block].borders.bottom_right;
     }
     return false;
   }
