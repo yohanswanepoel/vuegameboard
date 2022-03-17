@@ -184,12 +184,12 @@
 <template>
   <div class="button_container">
     <div v-if="current_block != -1">
-      <button v-if="possibleDirection(TOPLEFT)" v-on:click="move(TOPLEFT)">TL</button>
-      <button v-if="possibleDirection(TOPRIGHT)" v-on:click="move(TOPRIGHT)">TR</button>
-      <button v-if="possibleDirection(LEFT)" v-on:click="move(LEFT)">L</button>
-      <button v-if="possibleDirection(RIGHT)" v-on:click="move(RIGHT)">R</button>
-      <button v-if="possibleDirection(BOTTOMLEFT)" v-on:click="move(BOTTOMLEFT)">BL</button>
-      <button v-if="possibleDirection(BOTTOMRIGHT)" v-on:click="move(BOTTOMRIGHT)">BR</button>
+      <button :disabled="!possibleDirection(TOPLEFT)" v-on:click="move(TOPLEFT)">TL</button>
+      <button :disabled="!possibleDirection(TOPRIGHT)" v-on:click="move(TOPRIGHT)">TR</button>
+      <button :disabled="!possibleDirection(LEFT)" v-on:click="move(LEFT)">L</button>
+      <button :disabled="!possibleDirection(RIGHT)" v-on:click="move(RIGHT)">R</button>
+      <button :disabled="!possibleDirection(BOTTOMLEFT)" v-on:click="move(BOTTOMLEFT)">BL</button>
+      <button :disabled="!possibleDirection(BOTTOMRIGHT)" v-on:click="move(BOTTOMRIGHT)">BR</button>
     </div>
   </div>
   <div class="container">
