@@ -10,34 +10,99 @@ export {POLYGON};
 var SIZE = 100;
 export {SIZE};
 
+var WIDTH = 5;
+export {WIDTH};
+var HEIGHT = 4;
+export {HEIGHT};
+
 var BOARD = [
   [
-    'blue',
-    'green',
-    'red',
-    'purple',
-    'blue'
+    { 
+      colour: 'blue',
+      current_colour: 'blue'
+    },
+    { 
+      colour: 'green',
+      current_colour: 'green'
+    },
+    { 
+      colour: 'red',
+      current_colour: 'red'
+    },
+    { 
+      colour: 'purple',
+      current_colour: 'purple'
+    },
+    { 
+      colour: 'blue',
+      current_colour: 'blue'
+    }
   ],
   [
-    'red',
-    'blue',
-    'green',
-    'red',
-    'green'
+    { 
+      colour: 'red',
+      current_colour: 'red'
+    },
+    { 
+      colour: 'blue',
+      current_colour: 'blue'
+    },
+    { 
+      colour: 'green',
+      current_colour: 'green'
+    },
+    { 
+      colour: 'red',
+      current_colour: 'red'
+    },
+    { 
+      colour: 'green',
+      current_colour: 'green'
+    }
   ],
   [
-    'blue',
-    'green',
-    'red',
-    'purple',
-    'blue'
+    { 
+      colour: 'blue',
+      current_colour: 'blue'
+    },
+    { 
+      colour: 'green',
+      current_colour: 'green'
+    },
+    { 
+      colour: 'red',
+      current_colour: 'red'
+    },
+    { 
+      colour: 'purple',
+      current_colour: 'purple'
+    },
+    { 
+      colour: 'blue',
+      current_colour: 'blue'
+    }
   ],
   [
-    'red',
-    'blue',
-    'green',
-    'red',
-    'green'
-  ]
+    { 
+      colour: 'red',
+      current_colour: 'red'
+    },
+    { 
+      colour: 'blue',
+      current_colour: 'blue'
+    },
+    { 
+      colour: 'green',
+      current_colour: 'green'
+    },
+    { 
+      colour: 'red',
+      current_colour: 'red'
+    },
+    { 
+      colour: 'green',
+      current_colour: 'green'
+    }
+  ] 
 ];
 export{BOARD};

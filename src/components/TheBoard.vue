@@ -1,12 +1,16 @@
 <script setup>
   import { ref } from 'vue';
-  import { POLYGON, SIZE, BOARD } from './polygon.js';
-  console.log(POLYGON);
+  import { POLYGON, SIZE, BOARD, WIDTH, HEIGHT } from './polygon.js';
   const size = SIZE;
   const offset = SIZE / 2;
-  const hor_offset = offset + offset / 2 
-
-
+  const hor_offset = offset + offset / 2;
+  const current_block = ref(-1);
+  const TOPLEFT = 1;
+  const TOPRIGHT = 2;
+  const LEFT = 3;
+  const RIGHT = 4;
+  const BOTTOMLEFT = 5;
+  const BOTTOMRIGHT = 6;
 /*
   / \ / \ / \
  |0,0|1,0|2,0|
@@ -21,12 +25,12 @@
     let arr = Array()
     for (let row in BOARD ){
       for (let col in BOARD[row]){
-        console.log(BOARD[row][col]);
         const obj = {
           "key" : "" + row + "," + col,
           "row" : row,
           "col" : col,
-          "colour" : BOARD[row][col]
+          "colour" : BOARD[row][col].colour,
+          "original_color":  BOARD[row][col].colour,
         };
         arr.push(obj);
       }
@@ -36,7 +40,6 @@
 
   const board = ref(flattenArray());
 
-  console.log(board);
   function getPoints(row,col){
     let points = "";
     let counter = 0;
@@ -56,16 +59,139 @@
   }
 
   function clicked(index, key){
-    console.log(board);
-    console.log(index);
     console.log(this.board[index]);
+    if (this.current_block != -1){
+      this.board[this.current_block].colour = this.board[this.current_block].original_color;
+    }
+    this.current_block = index;
     this.board[index].colour = "black";
+  }
+
+  function move(direction){
+    // validate move
+    if(this.possibleDirection(direction)){
+      let block = this.board[this.current_block];
+      let curRow = parseInt(block.row);
+      let curCol = parseInt(block.col);
+      let newCol = 0;
+      let newRow = 0;
+      // left
+      if(direction == LEFT){
+        newCol = curCol - 1; 
+        newRow = curRow;
+      }
+      // right
+      if(direction == RIGHT){
+        newCol = curCol + 1; 
+        newRow = curRow;
+      }
+      if(direction == TOPLEFT){
+        if (curRow % 2 == 1) {
+          newCol = curCol; 
+          newRow = curRow - 1;
+        } else {
+          newCol = curCol - 1; 
+          newRow = curRow - 1;
+        }
+      }
+      // Up Right
+      if(direction == TOPRIGHT){
+        if (curRow % 2 == 1) {
+          newCol = curCol + 1; 
+          newRow = curRow - 1;
+        } else {
+          newCol = curCol; 
+          newRow = curRow - 1;
+        }
+      }
+      // Down Left
+      if(direction == BOTTOMLEFT){
+        if (curRow % 2 == 1) {
+          newCol = curCol ; 
+          newRow = curRow + 1;
+        } else {
+          newCol = curCol - 1; 
+          newRow = curRow + 1;
+        }
+      }
+      // Down Right
+      if(direction == BOTTOMRIGHT){
+         if (curRow % 2 == 1) {
+          newCol = curCol + 1; 
+          newRow = curRow + 1;
+        } else {
+          newCol = curCol; 
+          newRow = curRow + 1;
+        }
+      }
+      let searchKey = "" + newRow + "," + newCol
+      // find the mapped block based on the new key
+      let key = Object.keys(this.board).find(key => this.board[key].key === searchKey);
+
+      // Change the colors
+      this.board[this.current_block].colour = this.board[this.current_block].original_color;
+      this.current_block = key;
+      this.board[key].colour = "black";
+    }
+  }
+
+  function possibleDirection(direction){
+    let row = this.board[this.current_block].row;
+    let col = this.board[this.current_block].col;
+    let canLeft = 0;
+    // Left
+    if(direction == LEFT){
+      if (col > 0) {
+        return true;
+      }
+    }
+    // Right
+    if(direction == RIGHT){
+      if (col < WIDTH - 1) {
+        return true;
+      }
+    }
+    // Up Left
+    if(direction == TOPLEFT){
+      if (row > 0 && col > 0 || (row > 0 && (row % 2 == 1))) {
+        return true;
+      } 
+    }
+    // Up Right
+    if(direction == TOPRIGHT){
+      if (row > 0 && col < WIDTH - 1 || (row > 0 && (row % 2 == 0))) {
+        return true;
+      } 
+    }
+    // Down Left
+    if(direction == BOTTOMLEFT){
+      if (row < HEIGHT - 1 && col > 0 || (row < HEIGHT - 1 && (row % 2 == 1))) {
+        return true;
+      } 
+    }
+    // Down Right
+    if(direction == BOTTOMRIGHT){
+      if (row < HEIGHT - 1 && col < WIDTH - 1 || (row < HEIGHT - 1 && (row % 2 == 0))) {
+        return true;
+      } 
+    }
+    return false;
   }
 
   
 </script>
 
 <template>
+  <div class="button_container">
+    <div v-if="current_block != -1">
+      <button v-if="possibleDirection(TOPLEFT)" v-on:click="move(TOPLEFT)">TL</button>
+      <button v-if="possibleDirection(TOPRIGHT)" v-on:click="move(TOPRIGHT)">TR</button>
+      <button v-if="possibleDirection(LEFT)" v-on:click="move(LEFT)">L</button>
+      <button v-if="possibleDirection(RIGHT)" v-on:click="move(RIGHT)">R</button>
+      <button v-if="possibleDirection(BOTTOMLEFT)" v-on:click="move(BOTTOMLEFT)">BL</button>
+      <button v-if="possibleDirection(BOTTOMRIGHT)" v-on:click="move(BOTTOMRIGHT)">BR</button>
+    </div>
+  </div>
   <div class="container">
   <svg class="canvas">
       <polygon v-for="(block, index) in board" v-bind:key="block.key" :points="getPoints(block.row,block.col)" 
@@ -103,5 +229,12 @@
 }
 .container {
   height: 600px;
+}
+
+.button_container{
+  padding: 10px;
+  width: 100%;
+  height: 50px;
+  background: lightgray;
 }
 </style>
